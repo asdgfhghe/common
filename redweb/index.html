@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>建党100周年</title>
+    <link rel="shortcut icon" href="bitbug_favicon.ico">
+    <!--引入初始化base.css文件 -->
+    <link rel="stylesheet" href="css/base.css">
+    <!--引入共同样式common.css文件 -->
+    <link rel="stylesheet" href="css/common.css">
+    <!--引入index.css文件 -->
+    <link rel="stylesheet" href="css/index.css">
+    <script>
+        window.onload = function () {
+            //需求：被卷去的头部超过200显示小火箭，然后点击小火箭屏幕缓慢移动到最顶端。
+            //难点：我们以前是移动盒子，现在是移动屏幕，我们没有学过如何移动屏幕。
+            //      技术点：window.scrollTo(x,y);浏览器显示区域跳转到指定的坐标
+            //步骤：
+            //1.老三步
+            
+            var img = document.getElementsByTagName("img")[0];
+            window.onscroll = function () {  //鼠标滚动事件
+                //被卷去的距离大于200显示小火箭，否则隐藏
+                //2.显示隐藏小火箭
+                console.log(scroll().top);
+                if (scroll().top > 300) {
+                    img.style.display = "block";
+                } else {
+                    img.style.display = "none";
+                }
+                //每次移动滚动条的时候都给leader赋值，模拟leader获取距离顶部的距离
+                leader = scroll().top;
+            }
+            //3.缓动跳转到页面最顶端（利用我们的缓动动画）
+            var timer = null;
+            var target = 0; //目标位置
+            var leader = 0; //移动元素当前的位置
+            img.onclick = function () {
+                //技术点：window.scrollTo(0,0);
+                //要用定时器，先清定时器
+                clearInterval(timer);
+                timer = setInterval(function () {
+                    //获取步长
+                    var step = (target - leader) / 10;
+                    //二次处理步长
+                    step = step > 0 ? Math.ceil(step) : Math.floor(step);
+                    leader = leader + step;
+                    //屏幕(页面)滚动
+                    window.scrollTo(0, leader);  //屏幕(页面)滚动到某个位置
+                    //清除定时器
+                    if (leader === 0) {
+                        clearInterval(timer);
+                    }
+                }, 25);
+            }
+        }
+
+
+        //封装兼容的scrollTop(获取滚动卷起的高度)
+        function scroll() {
+            return {
+                "top": window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop,
+                "left": window.pageXOffset || document.body.scrollLeft || document.documentElement.scrollLeft
+            }
+        }
+
+    </script>
+    <script type="text/javascript">
+        var Follow = function () {
+            var $ = function (i) { return document.getElementById(i) },
+                addEvent = function (o, e, f) { o.addEventListener ? o.addEventListener(e, f, false) : o.attachEvent('on' + e, function () { f.call(o) }) },
+                OBJ = [], sp, rs, N = 0, m;
+            var init = function (id, config) {
+                this.config = config || {};
+                this.obj = $(id);
+                sp = this.config.speed || 4;
+                rs = this.config.animR || 1;
+                m = { x: $(id).offsetWidth * .5, y: $(id).offsetHeight * .5 };
+                this.setXY();
+                this.start();
+            }
+            init.prototype = {
+                setXY: function () {
+                    var _this = this;
+                    addEvent(this.obj, 'mousemove', function (e) {
+                        e = e || window.event;
+                        m.x = e.clientX;
+                        m.y = e.clientY;
+                    })
+                },
+                start: function () {
+                    var k = 180 / Math.PI, OO, o, _this = this, fn = this.config.fn;
+                    OBJ[N++] = OO = new CObj(null, 0, 0);
+                    for (var i = 0; i < 360; i += 20) {
+                        var O = OO;
+                        for (var j = 10; j < 35; j += 1) {
+                            var x = fn(i, j).x,
+                                y = fn(i, j).y;
+                            OBJ[N++] = o = new CObj(O, x, y);
+                            O = o;
+                        }
+                    }
+                    setInterval(function () {
+                        for (var i = 0; i < N; i++) OBJ[i].run();
+                    }, 16);
+                }
+            }
+            var CObj = function (p, cx, cy) {
+                var obj = document.createElement("span");
+                this.css = obj.style;
+                this.css.position = "absolute";
+                this.css.left = "-1000px";
+                this.css.zIndex = 1000 - N;
+                document.getElementById("screen").appendChild(obj);
+                this.ddx = 0;
+                this.ddy = 0;
+                this.PX = 0;
+                this.PY = 0;
+                this.x = 0;
+                this.y = 0;
+                this.x0 = 0;
+                this.y0 = 0;
+                this.cx = cx;
+                this.cy = cy;
+                this.parent = p;
+            }
+            CObj.prototype.run = function () {
+                if (!this.parent) {
+                    this.x0 = m.x;
+                    this.y0 = m.y;
+                } else {
+                    this.x0 = this.parent.x;
+                    this.y0 = this.parent.y;
+                }
+                this.x = this.PX += (this.ddx += ((this.x0 - this.PX - this.ddx) + this.cx) / rs) / sp;
+                this.y = this.PY += (this.ddy += ((this.y0 - this.PY - this.ddy) + this.cy) / rs) / sp;
+                this.css.left = Math.round(this.x) + 'px';
+                this.css.top = Math.round(this.y) + 'px';
+            }
+            return init;
+        }();
+    </script>
+</head>
+
+<body>
+    <div class="border" id="index"></div>
+    <!-- 鼠标特效制作 start -->
+
+    <!-- 鼠标特效制作 end  -->
+    <!-- 侧边栏制作 start-->
+    <div class="bodynav">
+        <ul>
+            <li><a href="#bd1">历程</a></li>
+            <li><a href="#bd2">活动进程</a></li>
+            <li><a href="#bd3">活动安排</a></li>
+            <audio autoplay="autoplay" controls="controls" loop="loop" controlslist="nodownload nofullscreen noremoteplayback noplaybackrate">
+                <source src="video/少年.mp3" type="audio/mpeg">
+            </audio>
+        </ul>
+    </div>
+    <div class="headnav">
+        <!-- <a href="#index"> -->
+        <img src="imges/小火箭1.png">
+        <!-- </a> -->
+    </div>
+    <!-- 侧边栏制作 end -->
+    <!-- 头部制作 start-->
+
+    <div class="head">
+        <div class="head_w">
+        <div class="mainlogo">
+            <h1>
+                <a href="index.html">庆祝党100周年!</a>
+            </h1>
+        </div>
+        <div class="search">
+            <input type="text" value="百年历程......" id="search">
+            <script>
+                var text = document.getElementById("search");
+                text.onfocus = function () {
+                    if (this.value = "百年历程......") this.value = "";
+                }
+                text.onblur = function () {
+                    if (this.value == "") this.value = "百年历程......";
+                }
+            </script>
+            <button>搜索</button>
+        </div>
+        <div class="hotwords">
+            <ul>
+                <li>百年党史</li>
+                <li>|</li>
+                <li>庆祝</li>
+                <li>|</li>
+                <li>寄语</li>
+                <li>|</li>
+                <li>活动</li>
+            </ul>
+        </div>
+        <div class="slogan">
+            百年党史百年庆典
+        </div>
+    </div>
+  </div>  
+    <div class="space"></div>
+    <!-- 头部制作 end -->
+    <!-- 主体制作 start -->
+    <div class="main w">
+        <div class="revolve">
+            <section>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </section>
+
+        </div>
+        <div class="title">
+            <p>建党100周年!</p>
+        </div>
+        <div class="licheng" id="bd1">
+            <div class="licheng_title">
+                <a href="road.html" target="_blank">
+                    <div class=" licheng_title_front">历程</div>
+                    <div class="licheng_title_back">详细</div>
+                </a>
+            </div>
+        </div>
+        <div class="licheng_body">
+            <p>1921—2021，中国共产党建党100周年。</p>
+            <p>100年来，中国社会沧桑巨变。从石库门到天安门，从兴业路到复兴路
+                ，从站起来、富起来到强起来,中国共产党与时代同步伐、与人民共命运，跨过一道又一道沟坎，取得一个又一个辉煌胜利。</p>
+            <p><b>百年恰是风华正茂，迈向新征程的中国共产党，举世瞩目!</b></p>
+        </div>
+        <div class="jincheng" id="bd2">
+            <div class="jincheng_title">活动进程</div>
+            <div class="jincheng_body">
+                <p>2018年，按照中央宣传部、中国文联、财政部、文化和旅游部等4部门印发的实施方案，中央财政安排资金，用于资助作品创作、奖励性购藏和专家考察指导研究等方面，通过中国文联部门预算安排项目经费1000万元，支持庆祝中国共产党成立100周年大型美术创作工程。
+                </p>
+                <p>2020年10月14日，国家广播电视总局组织的“庆祝中国共产党成立100周年”精品网络视听节目创作展播活动在第八届中国网络视听大会网络视听精品创作高峰论坛上正式启动，网络视听庆祝“中国共产党成立100周年”统一标识和精品网络视听节目片单也正式对外发布。
+                </p>
+                <p>2021年1月18日，中宣部在国家博物馆举行“奋斗百年路　启航新征程”大型主题采访活动启动仪式。隆重庆祝建党百年是党和国家政治生活中的一件大事，要记录历史伟业、展现百年风华，生动鲜活讲好中国共产党的故事，齐声唱响共产党好的主旋律，大力营造举国共庆百年华诞、齐心协力开创新局的浓厚氛围。
+                </p>
+                <p>2021年3月23日，中共中央召开2021年首场新闻发布会，中央宣传部分管日常工作的副部长王晓晖介绍了中国共产党成立100周年庆祝活动的有关安排。3月24日，中宣部发布中国共产党成立100周年庆祝活动标识。
+                </p>
+
+            </div>
+        </div>
+        <div class="anpai" id="bd3">
+            <div class="anpai_title">活动安排</div>
+            <div class="anpai_body">
+                <p><b>一、</b>开展党史学习教育。将结合巩固深化“不忘初心、牢记使命”主题教育成果，在全体党员中开展党史学习教育。这次学习教育贯穿2021年全年，总的要求是学史明理、学史增信、学史崇德、学史力行，教育引导党员干部学党史、悟思想、办实事、开新局。
+                </p>
+                <p><b>二、</b>举行庆祝大会。将以中共中央名义，隆重举行庆祝中国共产党成立100周年大会，中共中央总书记、国家主席、中央军委主席习近平将发表重要讲话。</p>
+                <p> <b>三、</b>开展“七一勋章”评选颁授和全国“两优一先”评选表彰。将以中共中央名义，向为党作出杰出贡献、创造宝贵精神财富的党员授予“七一勋章”，由中共中央总书记、国家主席、中央军委主席习近平签发证书，颁授勋章。还将评选表彰全国优秀共产党员、全国优秀党务工作者、全国先进基层党组织；向健在的党龄达到50年、一贯表现良好的老党员颁发“光荣在党50年”纪念章。此外，还将组织开展走访慰问获得党内功勋荣誉表彰的党员、生活困难党员、老党员、老干部和烈士遗属、因公殉职党员干部的家属等活动。
+                </p>
+                <p> <b>四、</b>举办大型主题展览。将举办“不忘初心、牢记使命”大型主题展览，全面、系统、生动、立体地展示中国共产党百年的光辉历程、伟大成就和宝贵经验。</p>
+                <p><b>五、</b>举办文艺演出。将举办庆祝中国共产党成立100周年大型文艺演出，邀请党和国家领导人、获得功勋荣誉表彰的代表、基层党员和群众代表等各界人士来观看。</p>
+                <p><b>六、</b>召开理论研讨会和座谈会。中央宣传部将会同中央组织部、中央党校（国家行政学院）、中央党史和文献研究院、教育部、中国社会科学院、军委政治工作部联合召开庆祝建党100周年理论研讨会；中央组织部将召开全国优秀共产党员、优秀党务工作者、先进基层党组织代表庆祝建党100周年座谈会，还要召开老党员老干部座谈会和党的建设历史经验研讨会；中央统战部将商各民主党派中央、无党派人士和全国工商联，召开各界人士庆祝中国共产党成立100周年座谈会。
+                </p>
+                <p><b>七、</b>创作推出一批文艺作品和出版物。将以中国共产党成立100年来的光辉历史、伟大成就和宝贵经验，以及各个历史时期涌现出来的先进典型为主要内容，制作播出大型文献专题片和专题节目。创作推出一批具有较高思想艺术水平的戏剧、音乐、舞蹈、电影、电视剧等各类优秀文艺作品。推出一批重点党史著作和理论文章，编写推出《中国共产党的100年》等重点出版物。此外，还将以庆祝建党100周年为主题，发行纪念邮票、纪念封和纪念币。
+                </p>
+                <p><b>八、</b>开展群众性主题宣传教育活动。将在全国城乡广泛开展“永远跟党走”群众性主题宣传教育活动。各地特别是在党的历史上具有重要意义的地方，将结合本地实际，围绕党史重要事件、重要活动和重要遗址旧址等组织开展丰富多彩的庆祝活动。
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- 主体制作 end -->
+    <!-- 底部制作 start -->
+    <div class="footer">
+        <div class="footer_left">
+            <div class="tv">
+                <video controls="controls" loop="loop" muted="muted" autoplay="autoplay">
+                    <source src="video/建党100周年.mp4" type="video/mp4">
+                    <source src="video/建党100周年.mp4" type="video/ogg">
+                    您的浏览器不支持 video 标签。
+                </video>
+            </div>
+        </div>
+        <div class="footer_middle">
+            <ul>
+                <li>
+                    <a href="handpaper.html" target="_blank">
+                        <img src="imges/建筑图标111.png">
+                    </a>
+                    <p>手抄报</p>
+                </li>
+                <li>
+                    <a href="works.html" target="_blank">
+                        <img src="imges/建筑图标222.png">
+                    </a>
+                    <p>文创产品</p>
+                </li>
+                <li>
+                    <a href="wish.html" target="_blank">
+                        <img src="imges/建筑图标333.png">
+                    </a>
+                    <p>诗歌</p>
+                </li>
+            </ul>
+        </div>
+        <div class="footer_right">
+            <div class="picture">
+                <a href="file:///F:/%E6%A1%8C%E9%9D%A2/%E8%BF%B7%E5%AE%AB/index.html" target="_blank"><img
+                        src="imges/棒棒哒1.png"></a>
+            </div>
+            <h2>棒棒哒!</h2>
+        </div>
+        <!-- <div class="music">
+            <video controls="controls" loop="loop" autoplay="autoplay">
+                <source src="video/少年.mp4" type="video/mp4">
+                <source src="video/少年.mp4" type="video/ogg">
+            </video>
+        </div> -->
+    </div>
+    <div class="border" id="index"></div>
+    <!-- 底部制作 end -->
+</body>
+
+</html>

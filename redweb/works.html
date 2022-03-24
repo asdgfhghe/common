@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>建党100周年</title>
+    <link rel="shortcut icon" href="bitbug_favicon.ico">
+    <!--引入初始化base.css文件 -->
+    <link rel="stylesheet" href="css/base.css">
+    <!--引入共同样式common.css文件 -->
+    <link rel="stylesheet" href="css/common.css">
+    <!--引入works.css文件 -->
+    <link rel="stylesheet" href="css/works.css">
+</head>
+
+<body>
+    <div class="border" id="index"></div>
+    <!-- 头部制作 start-->
+
+    <div class="head">
+        <div class="head_w">
+        <div class="mainlogo">
+            <h1>
+                <a href="index.html">庆祝党100周年!</a>
+            </h1>
+        </div>
+        <div class="search">
+            <input type="text" value="百年历程......" id="search">
+            <script>
+                var text = document.getElementById("search");
+                text.onfocus = function () {
+                    if (this.value = "百年历程......") this.value = "";
+                }
+                text.onblur = function () {
+                    if (this.value == "") this.value = "百年历程......";
+                }
+            </script>
+            <button>搜索</button>
+        </div>
+        <div class="hotwords">
+            <ul>
+                <li>百年党史</li>
+                <li>|</li>
+                <li>庆祝</li>
+                <li>|</li>
+                <li>寄语</li>
+                <li>|</li>
+                <li>活动</li>
+            </ul>
+        </div>
+        <div class="slogan">
+            百年党史百年庆典
+        </div>
+    </div>
+  </div>  
+    <div class="space"></div>
+    <!-- 头部制作 end -->
+    <div class="rabbit">
+    <div class="rabbit_video">
+        <video controls="controls" preload="auto" poster="imges/封面.jpg">
+            <source src="video/百年党史_1.mp4" type="video/mp4">
+            <source src="video/百年党史_1.mp4" type="video/ogg">
+        </video>
+    </div>
+    </div>
+    <!-- 底部制作 start -->
+    <div class="footer">
+        <div class="footer_left">
+            <div class="tv">
+                <video controls="controls" loop="loop" muted="muted" autoplay="autoplay">
+                    <source src="video/建党100周年.mp4" type="video/mp4">
+                    <source src="video/建党100周年.mp4" type="video/ogg">
+                    您的浏览器不支持 video 标签。
+                </video>
+            </div>
+        </div>
+        <div class="footer_middle">
+            <ul>
+                <li>
+                    <a href="handpaper.html" target="_blank">
+                        <img src="imges/建筑图标111.png">
+                    </a>
+                    <p>手抄报</p>
+                </li>
+                <li>
+                    <a href="works.html" target="_blank">
+                        <img src="imges/建筑图标222.png">
+                    </a>
+                    <p>文创产品</p>
+                </li>
+                <li>
+                    <a href="wish.html" target="_blank">
+                        <img src="imges/建筑图标333.png">
+                    </a>
+                    <p>诗歌</p>
+                </li>
+            </ul>
+        </div>
+        <div class="footer_right">
+            <div class="picture">
+                <a href="file:///F:/%E6%A1%8C%E9%9D%A2/%E8%BF%B7%E5%AE%AB/index.html" target="_blank"><img
+                        src="imges/棒棒哒1.png"></a>
+            </div>
+            <h2>棒棒哒!</h2>
+        </div>
+    </div>
+    <div class="border" id="index"></div>
+    <!-- 底部制作 end -->
+</body>
+
+</html>
